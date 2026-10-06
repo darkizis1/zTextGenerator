@@ -4,6 +4,8 @@ import fr.maxlego08.text.api.Alphabet;
 import fr.maxlego08.text.api.FontTransformation;
 import fr.maxlego08.text.api.TextGeneratorPlugin;
 import fr.maxlego08.text.api.fonts.FontInfo;
+import fr.maxlego08.text.font.TtfAlphabet;
+import fr.maxlego08.text.font.TtfFont;
 
 import java.io.File;
 import java.util.List;
@@ -16,13 +18,28 @@ public class ZAlphabet implements Alphabet {
     private final File file;
     private final List<FontInfo> fontInfos;
     private final FontTransformation fontTransformation;
+    private final TtfFont ttfFont;
 
     public ZAlphabet(TextGeneratorPlugin plugin, String name, File file, List<FontInfo> fontInfos, FontTransformation fontTransformation) {
+        this(plugin, name, file, fontInfos, fontTransformation, null);
+    }
+
+    public ZAlphabet(TextGeneratorPlugin plugin, String name, File file, List<FontInfo> fontInfos, FontTransformation fontTransformation, TtfFont ttfFont) {
         this.plugin = plugin;
         this.name = name;
         this.file = file;
         this.fontInfos = fontInfos;
         this.fontTransformation = fontTransformation;
+        this.ttfFont = ttfFont;
+    }
+
+    /**
+     * Gets the TTF font used by this alphabet.
+     *
+     * @return the font, or null if this alphabet uses the font of a pack plugin
+     */
+    public TtfFont getTtfFont() {
+        return this.ttfFont;
     }
 
     @Override
@@ -52,6 +69,11 @@ public class ZAlphabet implements Alphabet {
 
     @Override
     public int getLength(char c) {
+
+        if (this.ttfFont != null) {
+            return this.ttfFont.getAdvance(c);
+        }
+
         Optional<FontInfo> fontInfoOptional = this.fontInfos.stream().filter(e -> e.character() == c).findFirst();
         return fontInfoOptional.map(FontInfo::length).orElseGet(() -> {
             this.plugin.getLogger().info("Unknown character: " + c + " for alphabet: " + this.name);
@@ -61,6 +83,10 @@ public class ZAlphabet implements Alphabet {
 
     @Override
     public String transformChar(char c, int height) {
+
+        if (this.ttfFont != null) {
+            return TtfAlphabet.render(this.ttfFont, c);
+        }
 
         if (c == ' ') return " ";
 

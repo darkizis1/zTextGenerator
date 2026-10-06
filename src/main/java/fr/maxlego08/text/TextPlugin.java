@@ -10,8 +10,10 @@ import fr.maxlego08.text.api.text.Text;
 import fr.maxlego08.text.api.utils.Plugins;
 import fr.maxlego08.text.color.PaperColor;
 import fr.maxlego08.text.command.ZCommandManager;
+import fr.maxlego08.text.font.TtfFontManager;
 import fr.maxlego08.text.command.commands.CommandTextGenerator;
 import fr.maxlego08.text.listener.InventoryListener;
+import fr.maxlego08.text.listener.ResourcePackListener;
 import fr.maxlego08.text.messages.ZMessageManager;
 import fr.maxlego08.text.placeholders.AlignedPlaceholders;
 import fr.maxlego08.text.placeholders.BookPlaceholders;
@@ -33,6 +35,7 @@ public final class TextPlugin extends ZPlugin {
     private final TextManager textManager = new ZTextManager(this);
     private final ColorHelper colorHelper = new PaperColor();
     private final MessageManager messageManager = new ZMessageManager(this);
+    private final TtfFontManager ttfFontManager = new TtfFontManager(this);
     private final List<HookProvider> hookProviders = new ArrayList<>();
     private boolean enableDebug = false;
     private FontImage fontImage = new EmptyFont();
@@ -52,7 +55,12 @@ public final class TextPlugin extends ZPlugin {
 
         this.enableDebug = this.getConfig().getBoolean("enable-debug", false);
         this.defaultLanguage = normalizeLanguage(this.getConfig().getString("default-language", DEFAULT_LANGUAGE));
+
+        this.ttfFontManager.load();
+        this.applyConfiguredFontType();
+
         this.textManager.loadAlphabets();
+        this.ttfFontManager.registerAlphabets(this.textManager);
         this.textManager.loadTexts();
         this.textManager.loadBooks();
 
@@ -61,6 +69,7 @@ public final class TextPlugin extends ZPlugin {
 
         this.registerCommand("text-generator", new CommandTextGenerator(this), "text", "tg");
         this.registerListener(new InventoryListener(this));
+        this.registerListener(new ResourcePackListener(this));
 
         this.textManager.getTexts().forEach(Text::createCacheResult);
 
@@ -73,6 +82,7 @@ public final class TextPlugin extends ZPlugin {
     public void onDisable() {
         preDisable();
 
+        this.ttfFontManager.shutdown();
         this.hookProviders.forEach(hookProvider -> hookProvider.onDisable(this));
 
         postDisable();
@@ -106,7 +116,11 @@ public final class TextPlugin extends ZPlugin {
         this.enableDebug = this.getConfig().getBoolean("enable-debug", false);
         this.defaultLanguage = normalizeLanguage(this.getConfig().getString("default-language", DEFAULT_LANGUAGE));
 
+        this.ttfFontManager.reload();
+        this.applyConfiguredFontType();
+
         this.textManager.loadAlphabets();
+        this.ttfFontManager.registerAlphabets(this.textManager);
         this.textManager.loadTexts();
         this.textManager.loadBooks();
 
@@ -144,6 +158,48 @@ public final class TextPlugin extends ZPlugin {
     @Override
     public FontType getFontType() {
         return this.fontType;
+    }
+
+    /**
+     * Gets the manager which loads the {@code .ttf} files.
+     *
+     * @return the font manager
+     */
+    public TtfFontManager getTtfFontManager() {
+        return this.ttfFontManager;
+    }
+
+    /**
+     * Applies the {@code font-type} option of the configuration file.
+     *
+     * <p>When TTF files are present and the option is {@code AUTO}, the fonts of the plugin are
+     * used instead of the font of a pack plugin.</p>
+     */
+    private void applyConfiguredFontType() {
+
+        String configured = this.getConfig().getString("font-type", "AUTO").toUpperCase(Locale.ROOT);
+
+        switch (configured) {
+            case "ITEMSADDER" -> this.fontType = FontType.ITEMSADDER;
+            case "NEXO" -> this.fontType = FontType.NEXO;
+            case "ORAXEN" -> this.fontType = FontType.ORAXEN;
+            case "TTF" -> {
+                if (this.ttfFontManager.hasFonts()) {
+                    this.fontType = FontType.TTF;
+                    this.ttfFontManager.activate();
+                } else {
+                    getLogger().warning("font-type is set to TTF but no .ttf file was found inside the fonts folder.");
+                }
+            }
+            default -> {
+                if (this.ttfFontManager.hasFonts()) {
+                    this.fontType = FontType.TTF;
+                    this.ttfFontManager.activate();
+                }
+            }
+        }
+
+        getLogger().info("Font type : " + this.fontType.name());
     }
 
     private String normalizeLanguage(String language) {

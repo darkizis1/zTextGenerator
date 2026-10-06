@@ -17,6 +17,7 @@ import fr.maxlego08.text.api.text.animation.TextAnimationOptions;
 import fr.maxlego08.text.api.utils.Alignment;
 import fr.maxlego08.text.api.utils.ZUtils;
 import fr.maxlego08.text.book.ZBook;
+import fr.maxlego08.text.font.TtfFont;
 import fr.maxlego08.text.text.ZText;
 import fr.maxlego08.text.text.alphabet.AlphabetValidationStopReason;
 import fr.maxlego08.text.text.alphabet.AlphabetValidationTask;
@@ -340,8 +341,19 @@ public class ZTextManager extends ZUtils implements TextManager {
 
         FontTransformation fontTransformation = new ZFontTransformation(upperCase, lowerCase, specialFontTransformations);
 
-        this.alphabets.add(new ZAlphabet(this.plugin, name, file, fontInfos, fontTransformation));
-        this.plugin.getLogger().info("Loaded alphabet " + name + " from " + file.getName());
+        TtfFont ttfFont = this.plugin.getTtfFontManager().isActive()
+                ? this.plugin.getTtfFontManager().resolveFont(configuration.getString("font")).orElse(null)
+                : null;
+
+        this.alphabets.add(new ZAlphabet(this.plugin, name, file, fontInfos, fontTransformation, ttfFont));
+        this.plugin.getLogger().info("Loaded alphabet " + name + " from " + file.getName() + (ttfFont == null ? "" : " (ttf font " + ttfFont.getName() + ")"));
+    }
+
+    @Override
+    public void registerAlphabet(Alphabet alphabet) {
+
+        this.alphabets.removeIf(current -> current.getName().equalsIgnoreCase(alphabet.getName()));
+        this.alphabets.add(alphabet);
     }
 
     @Override

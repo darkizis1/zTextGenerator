@@ -34,6 +34,16 @@ public interface TextManager {
     Optional<Alphabet> getAlphabet(String name);
 
     /**
+     * Registers an alphabet, for example an alphabet created from a {@code .ttf} file.
+     *
+     * <p>If an alphabet with the same name already exists, it is replaced.</p>
+     *
+     * @param alphabet the alphabet to register
+     */
+    default void registerAlphabet(Alphabet alphabet) {
+    }
+
+    /**
      * Loads all texts from the configuration files.
      */
     void loadTexts();

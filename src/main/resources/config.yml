@@ -3,6 +3,45 @@
 # Enables detailed logging and debugging messages in the console.
 enable-debug: false
 
+# Which font system is used.
+#   AUTO       -> use the .ttf files of the fonts folder when there is at least one, otherwise
+#                 the font of the pack plugin (ItemsAdder / Nexo / Oraxen) is used.
+#   TTF        -> always use the .ttf files of the fonts folder.
+#   ITEMSADDER -> always use the ItemsAdder font.
+#   NEXO       -> always use the Nexo font.
+#   ORAXEN     -> always use the Oraxen font.
+font-type: AUTO
+
+# TTF fonts.
+#
+# Drop your .ttf (or .otf) files inside plugins/zTextGenerator/fonts/ and use the name of the file
+# as alphabet inside your texts, for example with MyFont.ttf :
+#   alphabet: "MyFont"
+#
+# The plugin generates the resource pack itself, so no image of the letters is needed.
+ttf:
+  # Enables the TTF fonts.
+  enabled: true
+  # Height of the letters, in pixels. 9 matches the vanilla text of the inventories.
+  size: 9
+  # pack_format written inside the generated pack.mcmeta (46 = 1.21.4).
+  pack-format: 46
+  # Font used by the alphabets which do not declare a "font" option. Empty = the first font.
+  default-font: ""
+  resource-pack:
+    # Sends the generated resource pack to the players when they join.
+    send-on-join: true
+    # Public link of the generated pack (for example a link to the pack uploaded on a website).
+    # When this option is empty the pack is generated inside plugins/zTextGenerator/generated/.
+    url: ""
+    # Starts a small http server which shares the generated pack.
+    auto-host: false
+    # Address and port used by that server.
+    host: "0.0.0.0"
+    port: 8163
+    # Address the players have to use to download the pack, for example your server ip.
+    public-address: ""
+
 # Default language used for texts and books.
 default-language: en_us
 
