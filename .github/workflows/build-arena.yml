@@ -32,19 +32,25 @@ jobs:
 
       - name: Diagnostics
         run: |
+          mkdir -p dist
           java -version
-          for u in https://repo.groupez.dev/releases https://plugins.gradle.org/m2 https://repo1.maven.org/maven2 https://repo.papermc.io/repository/maven-public https://jitpack.io; do
-            printf "%s -> " "$u"; curl -s -o /dev/null -m 20 -w "%{http_code}\n" "$u" || echo "fail"
-          done
+          curl -s -m 30 https://maven.devs.beer/dev/lone/api-itemsadder/maven-metadata.xml -o dist/itemsadder-metadata.xml || echo "itemsadder metadata unreachable"
+          head -60 dist/itemsadder-metadata.xml 2>/dev/null || true
 
       - name: Build with Gradle
         run: |
-          mkdir -p dist
           chmod +x gradlew
           set +e
           ./gradlew --no-daemon --stacktrace -x javadoc build > dist/build.log 2>&1
-          echo "gradle-exit=$?" | tee -a dist/build.log
-          tail -80 dist/build.log
+          code=$?
+          if [ $code -ne 0 ]; then
+            echo "" >> dist/build.log
+            echo "==== retry without the ItemsAdder hook (artifact missing from maven.devs.beer) ====" >> dist/build.log
+            ./gradlew --no-daemon --stacktrace -x javadoc -PskipItemsAdder build >> dist/build.log 2>&1
+            code=$?
+          fi
+          echo "gradle-exit=$code" >> dist/build.log
+          tail -40 dist/build.log
           exit 0
 
       - name: Collect jar

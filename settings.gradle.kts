@@ -13,7 +13,9 @@ pluginManagement {
 }
 
 include("API")
-include("Hooks:ItemsAdder")
+if (!providers.gradleProperty("skipItemsAdder").isPresent) {
+    include("Hooks:ItemsAdder")
+}
 include("Hooks:Nexo")
 include("Hooks:Oraxen")
 include("Hooks:ZMenu")
