@@ -172,7 +172,7 @@ public final class TtfPackGenerator {
             if (advances.length() > 0) {
                 advances.append(", ");
             }
-            advances.append("\"").append(escapeJson(glyph.character())).append("\": ").append(glyph.advance());
+            advances.append("\"").append(escapeJson(String.valueOf(glyph.character()))).append("\": ").append(glyph.advance());
         }
         if (advances.length() == 0) {
             advances.append("\" \": ").append(font.getSpaceAdvance());
@@ -207,7 +207,7 @@ public final class TtfPackGenerator {
             if (advances.length() > 0) {
                 advances.append(", ");
             }
-            advances.append("\"").append(escapeJson(entry.getKey())).append("\": ").append(entry.getValue());
+            advances.append("\"").append(escapeJson(String.valueOf(entry.getKey()))).append("\": ").append(entry.getValue());
         }
 
         return "{\n  \"providers\": [\n    {\"type\": \"space\", \"advances\": {" + advances + "}}\n  ]\n}\n";
