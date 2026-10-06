@@ -179,6 +179,108 @@ Required by:
     project :Hooks:ItemsAdder
 
 
-BUILD FAILED in 56s
+BUILD FAILED in 1m 6s
 2 actionable tasks: 2 executed
-gradle-exit=1
+
+==== retry without the ItemsAdder hook (artifact missing from maven.devs.beer) ====
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Type-safe project accessors is an incubating feature.
+> Task :API:compileJava UP-TO-DATE
+> Task :Hooks:Nexo:compileJava
+> Task :Hooks:Oraxen:compileJava
+> Task :Hooks:ZMenu:compileJava
+> Task :Hooks:compileJava NO-SOURCE
+
+> Task :compileJava
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: /home/runner/work/zTextGenerator/zTextGenerator/src/main/java/fr/maxlego08/text/zcore/ZPlugin.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :processResources
+> Task :classes
+> Task :jar
+> Task :javadocJar
+> Task :API:processResources NO-SOURCE
+> Task :API:classes UP-TO-DATE
+> Task :API:jar
+> Task :Hooks:processResources NO-SOURCE
+> Task :Hooks:classes UP-TO-DATE
+> Task :Hooks:jar
+> Task :Hooks:Nexo:processResources NO-SOURCE
+> Task :Hooks:Nexo:classes
+> Task :Hooks:Nexo:jar
+> Task :Hooks:Oraxen:processResources NO-SOURCE
+> Task :Hooks:Oraxen:classes
+> Task :Hooks:Oraxen:jar
+> Task :Hooks:ZMenu:processResources NO-SOURCE
+> Task :Hooks:ZMenu:classes
+> Task :Hooks:ZMenu:jar
+> Task :shadowJar
+> Task :sourcesJar
+> Task :assemble
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+> Task :check UP-TO-DATE
+> Task :build
+> Task :API:javadocJar
+> Task :API:shadowJar
+> Task :API:sourcesJar
+> Task :API:assemble
+> Task :API:compileTestJava NO-SOURCE
+> Task :API:processTestResources NO-SOURCE
+> Task :API:testClasses UP-TO-DATE
+> Task :API:test NO-SOURCE
+> Task :API:check UP-TO-DATE
+> Task :API:build
+> Task :Hooks:javadocJar
+> Task :Hooks:sourcesJar
+> Task :Hooks:assemble
+> Task :Hooks:compileTestJava NO-SOURCE
+> Task :Hooks:processTestResources NO-SOURCE
+> Task :Hooks:testClasses UP-TO-DATE
+> Task :Hooks:test NO-SOURCE
+> Task :Hooks:check UP-TO-DATE
+> Task :Hooks:build
+> Task :Hooks:Nexo:javadocJar
+> Task :Hooks:Nexo:sourcesJar
+> Task :Hooks:Nexo:assemble
+> Task :Hooks:Nexo:compileTestJava NO-SOURCE
+> Task :Hooks:Nexo:processTestResources NO-SOURCE
+> Task :Hooks:Nexo:testClasses UP-TO-DATE
+> Task :Hooks:Nexo:test NO-SOURCE
+> Task :Hooks:Nexo:check UP-TO-DATE
+> Task :Hooks:Nexo:build
+> Task :Hooks:Oraxen:javadocJar
+> Task :Hooks:Oraxen:sourcesJar
+> Task :Hooks:Oraxen:assemble
+> Task :Hooks:Oraxen:compileTestJava NO-SOURCE
+> Task :Hooks:Oraxen:processTestResources NO-SOURCE
+> Task :Hooks:Oraxen:testClasses UP-TO-DATE
+> Task :Hooks:Oraxen:test NO-SOURCE
+> Task :Hooks:Oraxen:check UP-TO-DATE
+> Task :Hooks:Oraxen:build
+> Task :Hooks:ZMenu:javadocJar
+> Task :Hooks:ZMenu:sourcesJar
+> Task :Hooks:ZMenu:assemble
+> Task :Hooks:ZMenu:compileTestJava NO-SOURCE
+> Task :Hooks:ZMenu:processTestResources NO-SOURCE
+> Task :Hooks:ZMenu:testClasses UP-TO-DATE
+> Task :Hooks:ZMenu:test NO-SOURCE
+> Task :Hooks:ZMenu:check UP-TO-DATE
+> Task :Hooks:ZMenu:build
+
+[Incubating] Problems report is available at: file:///home/runner/work/zTextGenerator/zTextGenerator/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 35s
+26 actionable tasks: 25 executed, 1 up-to-date
+gradle-exit=0
