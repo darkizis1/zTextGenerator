@@ -1,0 +1,24 @@
+package fr.maxlego08.text.hooks;
+
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
+import fr.maxlego08.text.api.fonts.FontImage;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class ItemsAdderFont implements FontImage {
+
+    private final Pattern pattern = Pattern.compile(":(\\w+):");
+
+    @Override
+    public String replace(String string, boolean removeColor) {
+        Matcher matcher = pattern.matcher(string);
+        StringBuilder result = new StringBuilder();
+        while (matcher.find()) {
+            String replacement = FontImageWrapper.replaceFontImages(matcher.group(0));
+            matcher.appendReplacement(result, Matcher.quoteReplacement(replacement));
+        }
+        matcher.appendTail(result);
+        return removeColor ? result.toString().replace("§f", "").replace("§r", "") : result.toString();
+    }
+}
